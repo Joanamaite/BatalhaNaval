@@ -73,39 +73,27 @@ public class NovoBatalhaNaval {
 
         System.out.println("Início do jogo!");
         boolean jogoFinalizado = false;
-
+        int contadorJogador1=0;
+        int contadorJogador2=0;
         while (!jogoFinalizado) {
             // Jogador 1 - Seu turno
-              realizarJogada(TabuleiroJogador2, tabuleiroMarcadoJogador2, ler, "Jogador 1");
-
-
-                if (verificarVitoria(tabuleiroMarcadoJogador2)) {
-                    System.out.println("O jogador 1 venceu!");
-                    jogoFinalizado = true;
-                }
-           
+              realizarJogada(TabuleiroJogador2, tabuleiroMarcadoJogador2, ler, "Jogador 1", contadorJogador1);
 
             if (contraMaquina) {
-                realizarJogadaMaquina(TabuleiroJogador2, tabuleiroMarcadoJogador1);
+                realizarJogadaMaquina(TabuleiroJogador1, tabuleiroMarcadoJogador1,contadorJogador2);
             } else {
                 // Jogador 2 - Seu turno
              
-                   realizarJogada(TabuleiroJogador2, tabuleiroMarcadoJogador2, ler, "Jogador 2");
-
-
-                    if (verificarVitoria(tabuleiroMarcadoJogador1)) {
-                        System.out.println("O jogador 2 venceu!");
-                        jogoFinalizado = true;
-                    }
+                 realizarJogada(TabuleiroJogador1, tabuleiroMarcadoJogador2, ler, "Jogador 2",contadorJogador2);
                 
             }
         }
 
         System.out.println("Fim de jogo");
     }
-public static void realizarJogada(char[][] tabuleiro, char[][] tabuleiroMarcado, Scanner ler, String jogador) {
+public static void realizarJogada(char[][] tabuleiro, char[][] tabuleiroMarcado, Scanner ler, String jogador, int contador) {
     boolean jogadaValida = false;
-
+   
     while (!jogadaValida) {
         System.out.println(jogador + " - Seu turno!");
         int linha, coluna;
@@ -129,6 +117,11 @@ public static void realizarJogada(char[][] tabuleiro, char[][] tabuleiroMarcado,
             System.out.println("Você acertou um navio!");
             tabuleiroMarcado[linha][coluna] = 'X'; // Marca o acerto no tabuleiro marcado
             exibirTabuleiro(tabuleiroMarcado);
+             contador++;
+            if(contador==20){
+                System.out.println("Fim de jogo");
+                jogadaValida=false;
+            }
             jogadaValida = true;
         } else if (tabuleiroMarcado[linha][coluna] == 'A') {
             System.out.println("Você já jogou nesta posição.");
@@ -138,28 +131,15 @@ public static void realizarJogada(char[][] tabuleiro, char[][] tabuleiroMarcado,
             jogadaValida = true;
         }
     }
+      System.out.println("Fim de jogo");
 }
 
-    public static boolean verificarVitoria(char[][] tabuleiroMarcado) {
-        int countX = 0;
-
-        for (int i = 0; i < tabuleiroMarcado.length; i++) {
-            for (int j = 0; j < tabuleiroMarcado[i].length; j++) {
-                if (tabuleiroMarcado[i][j] == 'X') {
-                    countX++;
-                }
-            }
-        }
-
-        return countX == 20; // Verifica se há 20 'X' no tabuleiro marcado
-
-    }
 
     // Método para realizar uma jogada da máquina
-    public static void realizarJogadaMaquina(char[][] tabuleiro, char[][] tabuleiroMarcado) {
+    public static void realizarJogadaMaquina(char[][] tabuleiro, char[][] tabuleiroMarcado, int contador) {
         Random random = new Random();
         int tamanho = tabuleiro.length;//tamanho do tabueleiro para dar números aleatorios ate seu tamanho
-
+       
         // Escolher uma posição aleatória para atacar
         int linha = random.nextInt(tamanho);
         int coluna = random.nextInt(tamanho);
@@ -171,6 +151,10 @@ public static void realizarJogada(char[][] tabuleiro, char[][] tabuleiroMarcado,
             // Marcar o acerto no tabuleiro marcado
             tabuleiroMarcado[linha][coluna] = 'X';
             exibirTabuleiro(tabuleiroMarcado);
+            contador++;
+            if(contador==20){
+                System.out.println("Fim de jogo");
+            }
         } else {
             tabuleiroMarcado[linha][coluna] = 'A';
             System.out.println("A máquina não acertou nenhum navio.");
@@ -491,3 +475,4 @@ public static void realizarJogada(char[][] tabuleiro, char[][] tabuleiroMarcado,
         }
     }
 }
+
